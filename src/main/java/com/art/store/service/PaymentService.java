@@ -28,17 +28,17 @@ public class PaymentService {
     private final StripeService stripeService;
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
-    private final EmailService emailService;
+//    private final EmailService emailService;
     
     @Value("${stripe.webhook.secret:whsec_YOUR_WEBHOOK_SECRET_HERE}")
     private String webhookSecret;
     
     @Autowired
-    public PaymentService(StripeService stripeService, PaymentRepository paymentRepository, OrderRepository orderRepository, EmailService emailService) {
+    public PaymentService(StripeService stripeService, PaymentRepository paymentRepository, OrderRepository orderRepository) {
         this.stripeService = stripeService;
         this.paymentRepository = paymentRepository;
         this.orderRepository = orderRepository;
-        this.emailService = emailService;
+//        this.emailService = emailService;
     }
     
     public PaymentIntent createPaymentIntent(Order order, String currency) throws StripeException {
@@ -251,12 +251,12 @@ public class PaymentService {
             orderRepository.save(order);
             
             // Send email notifications
-            try {
-                emailService.sendOrderConfirmationToCustomer(order);
-                emailService.sendOrderNotificationToAdmin(order);
-            } catch (Exception e) {
-                System.err.println("Failed to send email notifications for order: " + order.getId() + ", Error: " + e.getMessage());
-            }
+//            try {
+//                emailService.sendOrderConfirmationToCustomer(order);
+//                emailService.sendOrderNotificationToAdmin(order);
+//            } catch (Exception e) {
+//                System.err.println("Failed to send email notifications for order: " + order.getId() + ", Error: " + e.getMessage());
+//            }
             
             System.out.println("Payment succeeded for payment intent: " + paymentIntentId + ", Order: " + order.getId());
         } else {
@@ -356,12 +356,12 @@ public class PaymentService {
                             orderRepository.save(order);
                             
                             // Send email notifications
-                            try {
-                                emailService.sendOrderConfirmationToCustomer(order);
-                                emailService.sendOrderNotificationToAdmin(order);
-                            } catch (Exception e) {
-                                System.err.println("Failed to send email notifications for order: " + order.getId() + ", Error: " + e.getMessage());
-                            }
+//                            try {
+//                                emailService.sendOrderConfirmationToCustomer(order);
+//                                emailService.sendOrderNotificationToAdmin(order);
+//                            } catch (Exception e) {
+//                                System.err.println("Failed to send email notifications for order: " + order.getId() + ", Error: " + e.getMessage());
+//                            }
                             
                             System.out.println("Checkout session completed successfully for session: " + session.getId() + ", Order: " + order.getId());
                         }
