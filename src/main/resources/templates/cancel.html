@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Canceled - <span th:text="${businessName}">Free Sticker dot org</span></title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" th:href="@{/css/wada-sanzo-palette.css}">
+    <link rel="stylesheet" th:href="@{/css/retro-modern.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <a href="/" class="store-title" th:text="${businessName}">Free Sticker dot org</a>
+                <div class="header-social">
+                    <a href="https://instagram.com/total_willcall" class="instagram-link" target="_blank">instagram_link</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="cancel-container" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+                <div style="background: var(--warning-bg); border: 2px solid var(--warning-color); border-radius: 8px; padding: 40px; margin-bottom: 30px;">
+                    <h1 style="color: var(--warning-color); font-size: 2.5em; margin-bottom: 20px;">⚠️ Payment Canceled</h1>
+                    <p style="font-size: 1.2em; margin-bottom: 20px; color: var(--text-primary);">
+                        Your payment was canceled and no charges were made to your account.
+                    </p>
+                    
+                    <div style="background: var(--background-primary); border-radius: 6px; padding: 20px; margin: 20px 0;">
+                        <p style="color: var(--text-secondary); margin: 0;">
+                            Don't worry - your items are still available and nothing has been charged. 
+                            You can return to your cart to complete your purchase when you're ready.
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="/" class="retro-button retro-button-primary retro-button-large">
+                        Return to Store
+                    </a>
+                    <button onclick="history.back()" class="retro-button retro-button-large">
+                        Go Back
+                    </button>
+                </div>
+                
+                <div style="margin-top: 40px; padding: 20px; background: var(--background-secondary); border-radius: 6px;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 15px;">Need Help?</h4>
+                    <p style="color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                        If you experienced any issues during checkout or have questions about our products, 
+                        feel free to reach out to us through Instagram or email. We're here to help!
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -180,10 +180,17 @@ public class PaymentService {
     public void handleStripeWebhook(String payload, String sigHeader) throws Exception {
         Event event;
         
+        System.out.println("Webhook secret configured: " + (webhookSecret != null && !webhookSecret.equals("whsec_YOUR_WEBHOOK_SECRET_HERE")));
+        System.out.println("Webhook secret starts with 'whsec_': " + (webhookSecret != null && webhookSecret.startsWith("whsec_")));
+        
         try {
             event = Webhook.constructEvent(payload, sigHeader, webhookSecret);
+            System.out.println("Webhook signature validation successful");
         } catch (Exception e) {
-            throw new Exception("Invalid signature", e);
+            System.err.println("Webhook signature validation failed: " + e.getMessage());
+            System.err.println("Expected webhook secret format: whsec_xxx");
+            System.err.println("Current webhook secret: " + (webhookSecret != null ? webhookSecret.substring(0, Math.min(10, webhookSecret.length())) + "..." : "null"));
+            throw new Exception("Invalid signature: " + e.getMessage(), e);
         }
         
         // Handle the event

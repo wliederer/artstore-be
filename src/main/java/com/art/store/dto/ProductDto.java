@@ -1,6 +1,9 @@
 package com.art.store.dto;
 
 import com.art.store.entity.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -138,5 +141,29 @@ public class ProductDto {
     
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    
+    public String toJson() {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            
+            // Create a simplified object for frontend use
+            ProductDto simplified = new ProductDto();
+            simplified.setId(this.id);
+            simplified.setName(this.name);
+            simplified.setPrice(this.price);
+            simplified.setImage(this.image);
+            simplified.setCategory(this.category);
+            simplified.setDescription(this.description);
+            simplified.setStockQuantity(this.stockQuantity);
+            simplified.setActive(this.active);
+            // Skip LocalDateTime fields for frontend
+            
+            return mapper.writeValueAsString(simplified);
+        } catch (JsonProcessingException e) {
+            System.err.println("Failed to serialize product: " + e.getMessage());
+            return "{}";
+        }
     }
 }

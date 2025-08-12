@@ -10,6 +10,7 @@ import com.art.store.service.StripeService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.checkout.Session;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -158,13 +159,24 @@ public class PaymentController {
         }
     }
     
-    @PostMapping("/webhook")
-    public ResponseEntity<String> handleWebhook(@RequestBody String payload, 
-                                               @RequestHeader("Stripe-Signature") String sigHeader) {
+    @PostMapping(value = "/webhook")
+    public ResponseEntity<String> handleWebhook(@RequestBody byte[] payload, 
+                                               @RequestHeader("Stripe-Signature") String sigHeader,
+                                               HttpServletRequest request) {
         try {
-            paymentService.handleStripeWebhook(payload, sigHeader);
+            // Convert byte array to string for processing
+            String payloadString = new String(payload, "UTF-8");
+            
+            System.out.println("Webhook received:");
+            System.out.println("Signature: " + sigHeader);
+            System.out.println("Payload length: " + payload.length);
+            System.out.println("Content-Type: " + request.getContentType());
+            
+            paymentService.handleStripeWebhook(payloadString, sigHeader);
             return ResponseEntity.ok("Webhook handled successfully");
         } catch (Exception e) {
+            System.err.println("Webhook error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Webhook handling failed: " + e.getMessage());
         }
     }

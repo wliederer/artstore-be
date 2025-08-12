@@ -1,0 +1,153 @@
+/* Modern Retro Style - Inspired by Windows 98 but with Wada Sanzo colors */
+@import 'wada-sanzo-palette.css';
+
+/* Base Retro Button Styles */
+.retro-button {
+  background: linear-gradient(135deg, var(--background-primary) 0%, var(--background-secondary) 100%);
+  border: 1px solid var(--border-medium);
+  border-top-color: var(--background-primary);
+  border-left-color: var(--background-primary);
+  border-right-color: var(--border-dark);
+  border-bottom-color: var(--border-dark);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+  transition: all 0.1s ease;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.retro-button:hover {
+  background: linear-gradient(135deg, var(--background-secondary) 0%, var(--background-tertiary) 100%);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  border-color: var(--primary-color);
+  text-decoration: none;
+}
+
+.retro-button:active,
+.retro-button.active {
+  background: linear-gradient(135deg, #d0d0d0 0%, #c0c0c0 100%);
+  border-top-color: #666;
+  border-left-color: #666;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+  transform: translateY(1px);
+}
+
+.retro-button:disabled {
+  color: #999;
+  cursor: not-allowed;
+  background: linear-gradient(135deg, #e0e0e0 0%, #d0d0d0 100%);
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Primary Button (Dusty Rose theme) */
+.retro-button-primary {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  border-top-color: var(--primary-light);
+  border-left-color: var(--primary-light);
+  border-right-color: var(--primary-dark);
+  border-bottom-color: var(--primary-dark);
+  color: var(--text-inverse);
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+}
+
+.retro-button-primary:hover {
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-color) 100%);
+  box-shadow: var(--shadow-lg);
+}
+
+.retro-button-primary:active,
+.retro-button-primary.active {
+  background: linear-gradient(135deg, var(--primary-active) 0%, var(--primary-dark) 100%);
+  border-top-color: var(--primary-dark);
+  border-left-color: var(--primary-dark);
+  border-right-color: var(--primary-light);
+  border-bottom-color: var(--primary-light);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Large Button Variant */
+.retro-button-large {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.retro-button-large:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Input Fields - Modern but retro */
+.retro-input {
+  background: var(--background-primary);
+  border: 2px inset var(--border-light);
+  border-top-color: var(--border-medium);
+  border-left-color: var(--border-medium);
+  border-right-color: var(--background-primary);
+  border-bottom-color: var(--background-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  padding: 8px 12px;
+  outline: none;
+  transition: all 0.2s ease;
+  border-radius: 2px;
+  width: 100%;
+}
+
+.retro-input:focus {
+  background: var(--background-primary);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(196, 154, 154, 0.2);
+}
+
+.retro-input:disabled {
+  background: #f0f0f0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Error States */
+.retro-input.error {
+  background: #ffeaea;
+  border-color: #d63031;
+  box-shadow: 0 0 0 2px rgba(214, 48, 49, 0.2);
+}
+
+.retro-error-message {
+  color: #d63031;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+/* Quantity Controls */
+.retro-quantity-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+}

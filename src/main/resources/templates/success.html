@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success - <span th:text="${businessName}">Free Sticker dot org</span></title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" th:href="@{/css/wada-sanzo-palette.css}">
+    <link rel="stylesheet" th:href="@{/css/retro-modern.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <a href="/" class="store-title" th:text="${businessName}">Free Sticker dot org</a>
+                <div class="header-social">
+                    <a href="https://instagram.com/total_willcall" class="instagram-link" target="_blank">instagram_link</a>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="success-container" style="text-align: center; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+                <div style="background: var(--success-bg); border: 2px solid var(--success-color); border-radius: 8px; padding: 40px; margin-bottom: 30px;">
+                    <h1 style="color: var(--success-color); font-size: 2.5em; margin-bottom: 20px;">🎉 Payment Successful!</h1>
+                    <p style="font-size: 1.2em; margin-bottom: 20px; color: var(--text-primary);">
+                        Thank you for your order! Your payment has been processed successfully.
+                    </p>
+                    
+                    <div th:if="${orderId}" style="background: var(--background-primary); border-radius: 6px; padding: 20px; margin: 20px 0;">
+                        <h3 style="color: var(--text-primary); margin-bottom: 10px;">Order Details</h3>
+                        <p style="color: var(--text-secondary); margin: 5px 0;">
+                            <strong>Order ID:</strong> <span th:text="${orderId}"></span>
+                        </p>
+                        <p style="color: var(--text-secondary); margin: 5px 0; font-size: 0.9em;">
+                            You will receive an email confirmation shortly with your order details and tracking information.
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                            Your stickers will be prepared and shipped soon. We'll send you tracking information once your order is on its way!
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                    <a href="/" class="retro-button retro-button-primary retro-button-large">
+                        Continue Shopping
+                    </a>
+                    <a href="https://instagram.com/total_willcall" target="_blank" class="retro-button retro-button-large">
+                        Follow Us on Instagram
+                    </a>
+                </div>
+                
+                <div style="margin-top: 40px; padding: 20px; background: var(--background-secondary); border-radius: 6px;">
+                    <h4 style="color: var(--text-primary); margin-bottom: 15px;">What's Next?</h4>
+                    <ul style="text-align: left; color: var(--text-secondary); line-height: 1.6;">
+                        <li>📧 Check your email for order confirmation</li>
+                        <li>📦 Your order will be processed within 1-2 business days</li>
+                        <li>🚚 You'll receive tracking info once shipped</li>
+                        <li>💌 Follow us on social media for updates and new releases</li>
+                    </ul>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

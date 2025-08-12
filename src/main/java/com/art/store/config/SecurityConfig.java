@@ -18,13 +18,13 @@ import org.springframework.beans.factory.annotation.Value;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${app.cors.allowed-origins:http://localhost:3000,http://localhost:*}")
+    @Value("${app.cors.allowed-origins:http://localhost:8080,http://localhost:3000,http://localhost:*}")
     private String allowedOrigins;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            // Disable CSRF for stateless API
+            // Disable CSRF for API and web endpoints (using Stripe for payment security)
             .csrf(csrf -> csrf.disable())
             
             // Configure CORS
@@ -35,6 +35,12 @@ public class SecurityConfig {
             
             // Configure authorization
             .authorizeHttpRequests(authz -> authz
+                // Allow public access to web pages
+                .requestMatchers("/", "/success", "/cancel").permitAll()
+                
+                // Allow public access to static resources
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/fire.jpeg").permitAll()
+                
                 // Allow public access to product endpoints (read-only)
                 .requestMatchers("/api/products/**").permitAll()
                 
@@ -104,6 +110,7 @@ public class SecurityConfig {
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
+        source.registerCorsConfiguration("/**", configuration);
         
         return source;
     }

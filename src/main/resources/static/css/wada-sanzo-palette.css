@@ -1,0 +1,106 @@
+/* Wada Sanzo Inspired Color Palette */
+/* Based on the beautiful color combinations from "A Dictionary of Color Combinations" */
+
+:root {
+  /* === WADA SANZO COLOR COMBINATIONS === */
+  
+  /* Combination 1: Dusty Rose & Sage */
+  --ws-dusty-rose: #c49a9a;
+  --ws-sage-green: #8ba68b;
+  --ws-cream-white: #f7f3e9;
+  --ws-charcoal: #3a3a3a;
+
+  /* Combination 2: Terracotta & Deep Teal */
+  --ws-terracotta: #c4785a;
+  --ws-deep-teal: #4a6b6b;
+  --ws-warm-ivory: #f5f1e8;
+  --ws-dark-brown: #4a3728;
+
+  /* Combination 3: Mustard & Navy */
+  --ws-mustard: #d4a574;
+  --ws-navy-blue: #405d72;
+  --ws-soft-beige: #ede7d3;
+  --ws-deep-gray: #505050;
+
+  /* Combination 4: Coral & Forest */
+  --ws-coral: #c47b7b;
+  --ws-forest-green: #5a7c5a;
+  --ws-pale-yellow: #faf5e4;
+  --ws-warm-black: #2d2d2d;
+
+  /* Combination 5: Mauve & Olive */
+  --ws-mauve: #a67c9a;
+  --ws-olive-green: #7a8471;
+  --ws-bone-white: #f8f5f0;
+  --ws-slate-gray: #4d4d4d;
+
+  /* === PRIMARY THEME (Dusty Rose & Sage) === */
+  --primary-color: var(--ws-dusty-rose);
+  --primary-hover: #b88a8a;
+  --primary-active: #a67a7a;
+  --primary-light: #ddbdbd;
+  --primary-dark: #a67c7c;
+
+  --secondary-color: var(--ws-sage-green);
+  --secondary-hover: #7a967a;
+  --secondary-active: #6a866a;
+  --secondary-light: #a4baa4;
+  --secondary-dark: #6d826d;
+
+  --accent-color: var(--ws-terracotta);
+  --accent-hover: #b36749;
+  --accent-active: #a25d42;
+
+  --background-primary: var(--ws-cream-white);
+  --background-secondary: #f0ebe1;
+  --background-tertiary: #e8dfd2;
+
+  --text-primary: var(--ws-charcoal);
+  --text-secondary: #5a5a5a;
+  --text-muted: #7a7a7a;
+  --text-inverse: var(--ws-cream-white);
+
+  --border-light: #d4c4b0;
+  --border-medium: #b8a188;
+  --border-dark: var(--ws-deep-gray);
+
+  /* === SUCCESS STATES === */
+  --success-color: var(--ws-forest-green);
+  --success-hover: #4a6b4a;
+  --success-light: #8fa68f;
+  --success-bg: #f0f5f0;
+
+  /* === WARNING STATES === */
+  --warning-color: var(--ws-mustard);
+  --warning-hover: #c49463;
+  --warning-light: #e0c49a;
+  --warning-bg: #f8f4e8;
+
+  /* === ERROR STATES === */
+  --error-color: #b85c5c;
+  --error-hover: #a54a4a;
+  --error-light: #d48a8a;
+  --error-bg: #f5f0f0;
+
+  /* === NEUTRAL GRAYS === */
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-400: #bdbdbd;
+  --gray-500: #9e9e9e;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+
+  /* === SHADOWS & OVERLAYS === */
+  --shadow-sm: 0 1px 2px rgba(58, 58, 58, 0.05);
+  --shadow-md: 0 4px 6px rgba(58, 58, 58, 0.07);
+  --shadow-lg: 0 10px 15px rgba(58, 58, 58, 0.1);
+  --shadow-xl: 0 20px 25px rgba(58, 58, 58, 0.15);
+
+  --overlay-light: rgba(247, 243, 233, 0.8);
+  --overlay-medium: rgba(58, 58, 58, 0.4);
+  --overlay-dark: rgba(58, 58, 58, 0.7);
+}

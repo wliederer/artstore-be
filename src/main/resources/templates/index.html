@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${businessName}">Free Sticker dot org</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" th:href="@{/css/wada-sanzo-palette.css}">
+    <link rel="stylesheet" th:href="@{/css/retro-modern.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <a href="/" class="store-title" th:text="${businessName}">Free Sticker dot org</a>
+                <div class="header-social">
+                    <a href="https://instagram.com/total_willcall" class="instagram-link" target="_blank">instagram_link</a>
+                </div>
+            </div>
+            <div id="cartIndicator" class="cart-indicator" style="display: none;">
+                <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="9" cy="21" r="1"></circle>
+                    <circle cx="20" cy="21" r="1"></circle>
+                    <path d="m1 1 4 4 2.68 13.39a1 1 0 0 0 1 .61h9.72a1 1 0 0 0 1-.61L23 6H6"></path>
+                </svg>
+                <span id="cartCount">0</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div th:if="${products.empty}" class="empty-container">
+                <h2>No products available</h2>
+                <p>Check back later for new arrivals!</p>
+            </div>
+            
+            <div th:unless="${products.empty}" class="product-grid">
+                <div th:each="product : ${products}" class="product-card" th:data-product-id="${product.id}">
+                    <img th:src="${product.image}" th:alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <h3 class="product-name" th:text="${product.name}">Product Name</h3>
+                        <p class="product-description" th:text="${product.description}">Product description</p>
+                        <p class="product-price" th:text="'$' + ${product.price}">$0.00</p>
+                        <p class="product-stock" 
+                           th:classappend="${product.stockQuantity <= 0} ? 'out' : (${product.stockQuantity <= 5} ? 'low' : '')"
+                           th:text="${product.stockQuantity <= 0} ? 'Out of Stock' : (${product.stockQuantity <= 5} ? 'Only ' + ${product.stockQuantity} + ' left!' : 'In Stock')">
+                           In Stock
+                        </p>
+                        <button class="retro-button retro-button-primary add-to-cart-btn" 
+                                th:disabled="${product.stockQuantity <= 0}"
+                                th:data-product-id="${product.id}"
+                                th:data-product-name="${product.name}"
+                                th:data-product-price="${product.price}"
+                                th:data-product-image="${product.image}"
+                                th:data-product-description="${product.description}"
+                                th:data-product-stock="${product.stockQuantity}">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div id="cartOverlay" class="cart-overlay" style="display: none;">
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h2>Your Cart</h2>
+                <button class="retro-button" id="closeCartBtn">×</button>
+            </div>
+            <div class="cart-content">
+                <div id="cartItems" class="cart-items"></div>
+                <div id="cartTotal" class="cart-total" style="display: none;">
+                    <h3>Total: $<span id="totalAmount">0.00</span></h3>
+                </div>
+                
+                <div id="checkoutSection" class="checkout-section" style="display: none;">
+                    <h3>Checkout Information</h3>
+                    <form id="checkoutForm">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" class="retro-input" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" class="retro-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" class="retro-input" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="retro-input">
+                        </div>
+                        
+                        <h4>Shipping Address</h4>
+                        
+                        <div class="form-group">
+                            <label for="address">Address *</label>
+                            <input type="text" id="address" name="address" class="retro-input" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">City *</label>
+                                <input type="text" id="city" name="city" class="retro-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State *</label>
+                                <input type="text" id="state" name="state" class="retro-input" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="zipCode">Zip Code *</label>
+                                <input type="text" id="zipCode" name="zipCode" class="retro-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country *</label>
+                                <input type="text" id="country" name="country" class="retro-input" value="US" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="sameAsBilling" name="sameAsBilling" checked>
+                                Billing address is the same as shipping address
+                            </label>
+                        </div>
+                        
+                        <div id="billingAddressSection" style="display: none;">
+                            <h4>Billing Address</h4>
+                            
+                            <div class="form-group">
+                                <label for="billingAddress">Billing Address *</label>
+                                <input type="text" id="billingAddress" name="billingAddress" class="retro-input">
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="billingCity">Billing City *</label>
+                                    <input type="text" id="billingCity" name="billingCity" class="retro-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingState">Billing State *</label>
+                                    <input type="text" id="billingState" name="billingState" class="retro-input">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="billingZipCode">Billing Zip Code *</label>
+                                    <input type="text" id="billingZipCode" name="billingZipCode" class="retro-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="billingCountry">Billing Country *</label>
+                                    <input type="text" id="billingCountry" name="billingCountry" class="retro-input" value="US">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="retro-button retro-button-primary retro-button-large" id="checkoutBtn">
+                            Checkout with Stripe
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const stripePublishableKey = /*[[${stripePublishableKey}]]*/ '';
+        let stripe;
+        let cart = [];
+
+        // Initialize Stripe
+        console.log('Stripe publishable key:', stripePublishableKey);
+        
+        if (stripePublishableKey && 
+            stripePublishableKey !== 'pk_test_YOUR_PUBLISHABLE_KEY_HERE' && 
+            stripePublishableKey !== '' &&
+            stripePublishableKey.startsWith('pk_')) {
+            try {
+                stripe = Stripe(stripePublishableKey);
+                console.log('Stripe initialized successfully');
+            } catch (error) {
+                console.error('Failed to initialize Stripe:', error);
+            }
+        } else {
+            console.warn('Stripe not configured. Key value:', stripePublishableKey);
+        }
+
+        // Cart functionality
+        function updateCartDisplay() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            const cartIndicator = document.getElementById('cartIndicator');
+            const cartCountElement = document.getElementById('cartCount');
+            
+            if (cartCount > 0) {
+                cartIndicator.style.display = 'flex';
+                cartCountElement.textContent = cartCount;
+            } else {
+                cartIndicator.style.display = 'none';
+            }
+            
+            updateCartItems();
+        }
+
+        function updateCartItems() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutSection = document.getElementById('checkoutSection');
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty</p>';
+                cartTotal.style.display = 'none';
+                checkoutSection.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <p class="cart-item-price">$${item.price}</p>
+                            <div class="quantity-controls">
+                                <button class="retro-button retro-quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="retro-button retro-quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            <p>$${itemTotal.toFixed(2)}</p>
+                            <button class="retro-button" onclick="removeFromCart(${item.id})">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = html;
+            document.getElementById('totalAmount').textContent = total.toFixed(2);
+            cartTotal.style.display = 'block';
+            checkoutSection.style.display = 'block';
+        }
+
+        function addToCart(product) {
+            console.log('Adding product to cart:', product);
+            
+            if (!product || !product.id) {
+                console.error('Invalid product data:', product);
+                alert('Error: Invalid product data');
+                return;
+            }
+            
+            const existingItem = cart.find(item => item.id === product.id);
+            
+            if (existingItem) {
+                existingItem.quantity = Math.min(existingItem.quantity + 1, product.stockQuantity);
+                console.log('Updated existing item quantity:', existingItem);
+            } else {
+                const cartItem = {
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    description: product.description,
+                    stockQuantity: product.stockQuantity,
+                    quantity: 1
+                };
+                cart.push(cartItem);
+                console.log('Added new item to cart:', cartItem);
+            }
+            
+            console.log('Current cart:', cart);
+            updateCartDisplay();
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+                return;
+            }
+            
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity = Math.min(newQuantity, item.stockQuantity);
+                updateCartDisplay();
+            }
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartDisplay();
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add to cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productData = {
+                        id: parseInt(this.dataset.productId),
+                        name: this.dataset.productName,
+                        price: parseFloat(this.dataset.productPrice),
+                        image: this.dataset.productImage,
+                        description: this.dataset.productDescription,
+                        stockQuantity: parseInt(this.dataset.productStock)
+                    };
+                    addToCart(productData);
+                });
+            });
+
+            // Cart toggle
+            document.getElementById('cartIndicator').addEventListener('click', function() {
+                document.getElementById('cartOverlay').style.display = 'flex';
+            });
+
+            document.getElementById('closeCartBtn').addEventListener('click', function() {
+                document.getElementById('cartOverlay').style.display = 'none';
+            });
+
+            // Close cart when clicking outside
+            document.getElementById('cartOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+
+            // Billing address toggle
+            document.getElementById('sameAsBilling').addEventListener('change', function() {
+                const billingSection = document.getElementById('billingAddressSection');
+                const billingInputs = billingSection.querySelectorAll('input');
+                
+                if (this.checked) {
+                    billingSection.style.display = 'none';
+                    // Remove required attribute from billing fields when hidden
+                    billingInputs.forEach(input => input.removeAttribute('required'));
+                } else {
+                    billingSection.style.display = 'block';
+                    // Add required attribute to billing fields when shown
+                    billingInputs.forEach(input => {
+                        if (input.name.includes('billing')) {
+                            input.setAttribute('required', 'required');
+                        }
+                    });
+                }
+            });
+
+            // Checkout form
+            document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!stripe) {
+                    const errorMsg = stripePublishableKey ? 
+                        'Stripe configuration error. Please check your publishable key.' : 
+                        'Stripe is not configured. Please set your STRIPE_PUBLISHABLE_KEY environment variable.';
+                    alert(errorMsg);
+                    console.error('Stripe not available for checkout. Key:', stripePublishableKey);
+                    return;
+                }
+                
+                const formData = new FormData(this);
+                const customerInfo = Object.fromEntries(formData);
+                
+                // Ensure sameAsBilling is always a boolean
+                customerInfo.sameAsBilling = document.getElementById('sameAsBilling').checked;
+                
+                const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                
+                const checkoutPayload = {
+                    cart: cart,
+                    total: total,
+                    customerInfo: customerInfo,
+                    timestamp: new Date().toISOString()
+                };
+
+                try {
+                    console.log('Creating order with payload:', checkoutPayload);
+                    
+                    // Create order
+                    const orderResponse = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(checkoutPayload)
+                    });
+
+                    console.log('Order response status:', orderResponse.status);
+                    
+                    if (!orderResponse.ok) {
+                        throw new Error(`HTTP error! status: ${orderResponse.status}`);
+                    }
+
+                    const orderData = await orderResponse.json();
+                    console.log('Order data received:', orderData);
+
+                    if (orderData.success) {
+                        // Create Stripe checkout session
+                        const checkoutResponse = await fetch('/api/payments/create-checkout-session', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                orderId: orderData.orderId,
+                                amount: total,
+                                currency: 'usd'
+                            })
+                        });
+
+                        const checkoutData = await checkoutResponse.json();
+
+                        if (checkoutData.success) {
+                            // Redirect to Stripe Checkout
+                            const result = await stripe.redirectToCheckout({
+                                sessionId: checkoutData.sessionId
+                            });
+
+                            if (result.error) {
+                                alert('Error: ' + result.error.message);
+                            }
+                        } else {
+                            alert('Error creating checkout session: ' + checkoutData.message);
+                        }
+                    } else {
+                        alert('Error creating order: ' + orderData.message);
+                    }
+                } catch (error) {
+                    console.error('Checkout error:', error);
+                    alert('An error occurred during checkout. Please try again.');
+                }
+            });
+        });
+
+        // Handle return from Stripe
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const success = urlParams.get('success');
+            const orderId = urlParams.get('order_id');
+            const canceled = urlParams.get('canceled');
+
+            if (success === 'true' && orderId) {
+                cart = [];
+                updateCartDisplay();
+                alert('Payment successful! Your order has been placed.');
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            } else if (canceled === 'true') {
+                alert('Payment canceled. Your items are still in your cart.');
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
+</body>
+</html>
